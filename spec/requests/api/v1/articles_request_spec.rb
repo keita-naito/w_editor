@@ -68,32 +68,60 @@ RSpec.describe "Api::V1::Articles", type: :request do
         expect(response).to have_http_status(:ok)
       end
     end
+  end
 
-    describe "PATCH /api/v1/articles/:id" do
-      subject { patch(api_v1_article_path(article.id), params: params) }
+  describe "PATCH /api/v1/articles/:id" do
+    subject { patch(api_v1_article_path(article.id), params: params) }
 
-      let(:params) { { article: attributes_for(:article) } }
-      let(:current_user) { create(:user) }
-      before do
-        allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user)
+    let(:params) { { article: attributes_for(:article) } }
+    let(:current_user) { create(:user) }
+    before do
+      allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user)
+    end
+
+    context "自分の記事を更新するとき" do
+      let(:article) { create(:article, user: current_user) }
+
+      it "任意の記事の更新ができる" do
+        expect { subject }.to change { Article.find(article.id).title }.from(article.title).to(params[:article][:title]) &
+                              change { Article.find(article.id).body }.from(article.body).to(params[:article][:body])
       end
+    end
 
-      context "自分の記事を更新するとき" do
-        let(:article) { create(:article, user: current_user) }
+    context "他のuserの記事を更新しようとるすとき" do
+      let(:other_user) { create(:user) }
+      let!(:article) { create(:article, user: other_user) }
 
-        it "任意の記事の更新ができる" do
-          expect { subject }.to change { Article.find(article.id).title }.from(article.title).to(params[:article][:title]) &
-                                change { Article.find(article.id).body }.from(article.body).to(params[:article][:body])
+      it "更新できない" do
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        change { Article.count }.by(0)
+      end
+    end
+
+    describe "DELETE /articles/:id" do
+      subject { delete(api_v1_article_path(article_id)) }
+
+      # devise_token_auth の導入が完了後に削除
+      let(:current_user) { create(:user) }
+      let(:article_id) { article.id }
+      before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) }
+
+      context "自分の記事を削除しようとするとき" do
+        let!(:article) { create(:article, user: current_user) }
+
+        it "記事を削除できる" do
+          expect { subject }.to change { Article.count }.by(-1)
+          expect(response).to have_http_status(:no_content)
         end
       end
 
-      context "他のuserの記事を更新しようとるすとき" do
+      context "他人が所持している記事のレコードを削除しようとするとき" do
         let(:other_user) { create(:user) }
-        before(:article) { create(:article, user: other_user) }
+        let!(:article) { create(:article, user: other_user) }
 
-        it "更新できない" do
-          expect { subject }.to raise_error ActiveRecord::RecordNotFound &
-                                            change { Article.count }.by(0)
+        it "記事を削除できない" do
+          expect { subject }.to raise_error(ActiveRecord::RecordNotFound) &
+                                change { Article.count }.by(0)
         end
       end
     end
