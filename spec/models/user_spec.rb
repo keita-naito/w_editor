@@ -52,12 +52,11 @@ RSpec.describe User, type: :model do
     end
 
     context "email がない場合" do
-      let(:user) { build(:user, email: nil,) }
+      let(:user) { build(:user, email: nil) }
 
       it "エラーが発生する" do
         expect(user).not_to be_valid
       end
     end
   end
-
 end
