@@ -29,34 +29,10 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_uid_and_provider      (uid,provider) UNIQUE
 #
-require "rails_helper"
-
-RSpec.describe User, type: :model do
-  describe "正常系" do
-    context "名前、メールアドレス、パスワードが入力されている場合" do
-      let(:user) { build(:user) }
-
-      it "ユーザー登録できる" do
-        expect(user).to be_valid
-      end
-    end
-  end
-
-  describe "異常系" do
-    context "名前しか入力していない場合" do
-      let(:user) { build(:user, email: nil, password: nil) }
-
-      it "エラーが発生する" do
-        expect(user).not_to be_valid
-      end
-    end
-
-    context "email がない場合" do
-      let(:user) { build(:user, email: nil) }
-
-      it "エラーが発生する" do
-        expect(user).not_to be_valid
-      end
-    end
+FactoryBot.define do
+  factory :user do
+    name { Faker::Lorem.characters(number: Random.new.rand(1..30)) }
+    sequence(:email) {|n| "#{n}_#{Faker::Internet.email}" }
+    password { Faker::Internet.password(min_length: 8, max_length: 32, mix_case: true, special_characters: true) }
   end
 end
