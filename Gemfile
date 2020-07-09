@@ -24,6 +24,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "foreman" # Procfile を読み込み、複数のプロセスを管理できるツール
   gem "listen", "~> 3.2.1"
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem "annotate"
