@@ -1,11 +1,12 @@
 <template>
   <div id="articles-container">
-    <ul>
-      <li v-for="article in articles" v-bind:key="article.id">
-        <div>{{article.title}}</div>
-        <div>{{article.body}}</div>
-      </li>
-    </ul>
+    <div v-for="article in articles" v-bind:key="article.id">
+      <v-card class="mb-5" style="margin: 0 auto;" justify-center max-width="600" >
+          <v-card-title>{{article.title}}</v-card-title>
+          <v-divider class="mx-4"></v-divider>
+          <v-card-text>{{article.body}}</v-card-text>
+      </v-card>
+    </div>
   </div>
 </template>
 
