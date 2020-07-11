@@ -1,5 +1,4 @@
 class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
-  protect_from_forgery with: :null_session
 
   private
 
