@@ -1,5 +1,7 @@
 module Api::V1
   class ArticlesController < BaseApiController
+    before_action :authenticate_user!, only: [:create, :update, :destroy]
+
     def index
       articles = Article.all
       render json: articles
