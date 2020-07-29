@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Api/V1::Auth::Registrations", type: :request do
+RSpec.describe "Api::V1::Auth::Registrations", type: :request do
   describe "POST /v1/auth" do
     subject { post(api_v1_user_registration_path, params: params) }
 
@@ -55,6 +55,86 @@ RSpec.describe "Api/V1::Auth::Registrations", type: :request do
         res = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(res["errors"]["password"][0]).to include "can't be blank"
+      end
+    end
+  end
+
+  describe "POST /api/v1/auth/sign_in" do
+    subject { post(api_v1_user_session_path, params: params) }
+
+    context "登録済みのユーザーの正しいメールアドレスとパスワードを送信したとき" do
+      let!(:user) { create(:user) }
+      let(:params) { { email: user.email, password: user.password } }
+
+      it "トークン情報を取得できる" do
+        subject
+
+        headers = response.headers
+
+        expect(response).to have_http_status(:ok)
+        expect(headers["access-token"]).to be_present
+        expect(headers["client"]).to be_present
+        expect(headers["expiry"]).to be_present
+        expect(headers["uid"]).to be_present
+        expect(headers["token-type"]).to be_present
+      end
+    end
+
+    context "存在しないメールアドレスを送信したとき" do
+      let!(:user) { create(:user) }
+      let(:params) { { email: "000_#{Faker::Internet.email}", password: user.password } }
+
+      it "トークン情報を取得できない" do
+        subject
+
+        headers = response.headers
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(headers["access-token"]).to be_blank
+        expect(headers["client"]).to be_blank
+        expect(headers["expiry"]).to be_blank
+        expect(headers["uid"]).to be_blank
+        expect(headers["token-type"]).to be_blank
+      end
+    end
+
+    context "パスワードに誤りがあったとき" do
+      let!(:user) { create(:user) }
+      let(:params) { { email: user.email, password: "dummy_password" } }
+
+      it "トークン情報を取得できない" do
+        subject
+
+        headers = response.headers
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(headers["access-token"]).to be_blank
+        expect(headers["client"]).to be_blank
+        expect(headers["expiry"]).to be_blank
+        expect(headers["uid"]).to be_blank
+        expect(headers["token-type"]).to be_blank
+      end
+    end
+  end
+
+  describe "DELETE /api/v1/auth/sign_out" do
+    subject { delete(destroy_api_v1_user_session_path, params: params, headers: headers) }
+
+    context "ログイン済みのユーザーの情報を送ったとき" do
+      let(:user) { create(:user) }
+      let(:params) { { email: user.email, password: user.password } }
+      let!(:headers) { user.create_new_auth_token }
+
+      it "トークン情報が削除される" do
+        expect { subject }.to change { user.reload.tokens }.from(be_present).to(be_empty)
+
+        res = JSON.parse(response.body)
+        expect(user.reload.tokens).to be_blank
+        expect(response.headers["uid"]).to be_blank
+        expect(response.headers["access-token"]).to be_blank
+        expect(response.headers["client"]).to be_blank
+        expect(response).to have_http_status(:ok)
+        expect(res["success"]).to be true
       end
     end
   end
