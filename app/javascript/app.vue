@@ -1,9 +1,9 @@
 <template>
   <v-app id="app">
     <Header/>
-    <v-container>
+    <div class="layout">
       <router-view></router-view>
-    </v-container>
+    </div>
   </v-app>
 </template>
 
@@ -22,4 +22,7 @@ export default {
 </script>
 
 <style scoped>
+.layout {
+  background: #ECF6FE
+}
 </style>

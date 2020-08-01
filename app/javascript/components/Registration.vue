@@ -1,46 +1,93 @@
 <template>
-  <form>
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      label="ユーザー名"
-      value="name"
-      required
-    ></v-text-field>
-    <v-text-field
-      v-model="email"
-      label="メールアドレス"
-      value="email"
-      required
-    ></v-text-field>
-    <v-text-field
-      v-model="password"
-      name="password"
-      label="パスワード"
-      hint="At least 8 characters"
-      counter
-    ></v-text-field>
-
-    <v-btn color="#55c500" class="white--text font-weight-bold">登録</v-btn>
-  </form>
+  <v-container>
+    <v-row class="layout" justify="center">
+      <v-col cols="8">
+        <h2 class="mb-5">ユーザー登録</h2>
+        <v-form>
+          <v-text-field
+            v-model="name"
+            type="name"
+            label="アカウント名"
+            outlined
+            placeholder="お名前"
+          />
+          <v-text-field
+            v-model="email"
+            type="email"
+            label="メールアドレス"
+            outlined
+            placeholder="test@example.com"
+          />
+          <v-text-field
+            v-model="password"
+            type="password"
+            label="パスワード(半角英数字)"
+            outlined
+            placeholder="********"
+          />
+          <v-btn
+            color="#42a0e3"
+            block
+            rounded
+            depressed
+            nuxt
+            :loading="loading"
+            class="white--text font-weight-bold"
+            @click="submit"
+            >登録</v-btn
+          >
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import axios from 'axios'
+import Router from "../router/router";
+
 export default {
   data() {
     return {
-      name:  "",
-      email: "",
-      show: false,
-      password: "",
+      name:  '',
+      loading: false,
+      email: '',
+      password: '',
     }
   },
 
-
   methods: {
+    async submit() {
+      this.loading = true
+      const params = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      }
+      await axios
+        .post("/api/v1/auth", params)
+        .then(response => {
+          Router.push("/")
+        })
+        .catch(error => {
+          alert(error);
+        })
+        .finally(() => {
+          this.loading = false
+        })
+        console.log("hi")
+    }
   }
 }
+
+
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
+.layout {
+  background: #fff;
+  margin: 90px auto 0;
+  width: 500px;
+}
+
 </style>
