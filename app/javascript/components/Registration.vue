@@ -67,10 +67,18 @@ export default {
       await axios
         .post("/api/v1/auth", params)
         .then(response => {
-          Router.push("/")
+          localStorage.setItem("access-token", response.headers["access-token"]);
+          localStorage.setItem("uid", response.headers["uid"]);
+          localStorage.setItem("client", response.headers["client"]);
+
+          Router.push("/");
+
+          // TODO: Vuex でログイン状態を管理するようになったら消す
+          window.location.reload();
         })
-        .catch(error => {
-          alert(error);
+        .catch(e => {
+          // TODO: 適切な Error 表示
+          alert(e.response.data.errors.full_messages);
         })
         .finally(() => {
           this.loading = false
