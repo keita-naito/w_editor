@@ -16,7 +16,7 @@
       <router-link to="/sign_up" class="header-link">
         <v-btn text class="register font-weight-bold">ユーザー登録</v-btn>
       </router-link>
-      <router-link to="/" class="header-link">
+      <router-link to="/sign_in" class="header-link">
         <v-btn text class="font-weight-bold">ログイン</v-btn>
       </router-link>
     </template>
@@ -48,7 +48,6 @@ export default {
 
   methods: {
     async logout() {
-      debugger
       await axios
         .delete("/api/v1/auth/sign_out", headers)
         .then(_response => {
