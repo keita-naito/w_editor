@@ -1,13 +1,15 @@
 <template>
-  <div id="articles-container">
-    <div v-for="article in articles" v-bind:key="article.id">
-      <v-card class="mb-5" style="margin: 0 auto;" justify-center max-width="600" >
+  <v-container class="mt-5">
+    <div id="articles-container">
+      <div v-for="article in articles" v-bind:key="article.id">
+        <v-card flat class="mb-5" style="margin: 0 auto;" justify-center max-width="600" >
           <v-card-title>{{article.title}}</v-card-title>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>{{article.body}}</v-card-text>
-      </v-card>
+        </v-card>
+      </div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
