@@ -5,25 +5,31 @@
         <h2 class="mb-5">ユーザー登録</h2>
         <v-form>
           <v-text-field
+            dense
             v-model="name"
             type="name"
             label="アカウント名"
             outlined
             placeholder="お名前"
+            class="mb-5"
           />
           <v-text-field
+            dense
             v-model="email"
             type="email"
             label="メールアドレス"
             outlined
             placeholder="test@example.com"
+            class="mb-5"
           />
           <v-text-field
+            dense
             v-model="password"
             type="password"
             label="パスワード(半角英数字)"
             outlined
             placeholder="********"
+            class="mb-10"
           />
           <v-btn
             color="#42a0e3"
@@ -94,8 +100,9 @@ export default {
 <style scoped lang="scss">
 .layout {
   background: #fff;
-  margin: 90px auto 0;
+  margin: 20px auto 0;
   width: 500px;
+  padding: 20px 0;
 }
 
 </style>

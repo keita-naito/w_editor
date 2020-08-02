@@ -1,6 +1,8 @@
 <template>
   <v-app id="app">
-    <Header/>
+    <dir class="header">
+     <Header/>
+    </dir>
     <div class="layout">
       <router-view></router-view>
     </div>
@@ -22,6 +24,10 @@ export default {
 </script>
 
 <style scoped>
+.header {
+  margin-bottom: 70px;
+}
+
 .layout {
   background: #ECF6FE
 }
