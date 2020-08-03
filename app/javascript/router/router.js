@@ -32,6 +32,7 @@ const router = new Router({
     {
       path: "/articles/:id",
       component: Article,
+      name: "article",
     },
   ],
 });
