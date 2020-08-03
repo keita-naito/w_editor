@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import ArticleList from "../components/ArticleList.vue";
+import Article from "../components/Article.vue";
 import Registration from "../components/Registration.vue";
 import Login from "../components/Login.vue";
 import EditArticle from "../components/EditArticle.vue";
@@ -27,6 +28,10 @@ const router = new Router({
     {
       path: "/articles/new",
       component: EditArticle,
+    },
+    {
+      path: "/articles/:id",
+      component: Article,
     },
   ],
 });
