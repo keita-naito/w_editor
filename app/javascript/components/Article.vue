@@ -9,7 +9,7 @@
       <h1 class="article-title">{{ article.title }}</h1>
     </v-layout>
     <v-layout class="article-body-container">
-      <div id="article-body">{{ article.body }}</div>
+      <div id="article-body" v-html="compiledMarkdown"></div>
     </v-layout>
   </v-container>
 </template>
@@ -17,6 +17,7 @@
 <script>
 import axios from "axios";
 import TimeAgo from 'vue2-timeago'
+import marked from "marked";
 
 export default {
   components: {
@@ -31,6 +32,12 @@ export default {
 
   mounted() {
     this.fetchArticle(this.$route.params.id)
+  },
+
+  computed: {
+    compiledMarkdown() {
+      return marked(this.article.body);
+    }
   },
 
   methods: {
