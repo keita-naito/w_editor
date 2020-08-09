@@ -13,11 +13,11 @@
     </v-layout>
   </v-container>
 </template>
-
 <script>
 import axios from "axios";
 import TimeAgo from 'vue2-timeago'
 import marked from "marked";
+import hljs from 'highlight.js';
 
 export default {
   components: {
@@ -28,6 +28,36 @@ export default {
     return {
       article: ""
     }
+  },
+
+  async created(){
+    // Add 'hljs' class to code tag
+    const renderer = new marked.Renderer();
+    renderer.code = function(code, language) {
+      return (
+        "<pre" +
+        '><code class="hljs">' +
+        hljs.highlightAuto(code).value +
+        "</code></pre>"
+      );
+    };
+    marked.setOptions({
+      renderer: renderer,
+      tables: true,
+      sanitize: true,
+      langPrefix: "",
+      highlight: function(code, lang) {
+        if (!lang || lang == "default") {
+          return hljs.highlightAuto(code, [lang]).value;
+        } else {
+          try {
+            return hljs.highlight(lang, code, true).value;
+          } catch (e) {
+            // Do nonthing!
+          }
+        }
+      }
+    });
   },
 
   mounted() {
@@ -51,7 +81,7 @@ export default {
           // TODO: 適切な Error 表示
           alert(e.response.statusText);
         });
-    }
+    },
   }
 }
 </script>
@@ -61,7 +91,7 @@ export default {
   margin-bottom: 1em;
 }
 .article-container {
-  margin: 2em;
+  margin-top: 2em;
 }
 .article-title {
   font-size: 2.5em;
