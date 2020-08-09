@@ -32,3 +32,20 @@ export default {
   background: #ECF6FE
 }
 </style>
+
+<style>
+.v-application code, .v-application kbd {
+  border-radius: initial !important;
+  font-size: initial !important;
+  font-weight: initial !important;
+}
+
+.hljs {
+  background-color: #23241f !important;
+  padding: 0.5em !important;
+}
+
+.hljs, .hljs-tag, .hljs-subst {
+    color: #fff !important;
+}
+</style>
