@@ -91,31 +91,31 @@ RSpec.describe "Api::V1::Articles", type: :request do
         change { Article.count }.by(0)
       end
     end
+  end
 
-    describe "DELETE /articles/:id" do
-      subject { delete(api_v1_article_path(article_id), headers: headers) }
+  describe "DELETE /articles/:id" do
+    subject { delete(api_v1_article_path(article_id), headers: headers) }
 
-      let(:current_user) { create(:user) }
-      let(:article_id) { article.id }
-      let(:headers) { current_user.create_new_auth_token }
+    let(:current_user) { create(:user) }
+    let(:article_id) { article.id }
+    let(:headers) { current_user.create_new_auth_token }
 
-      context "自分の記事を削除しようとするとき" do
-        let!(:article) { create(:article, user: current_user) }
+    context "自分の記事を削除しようとするとき" do
+      let!(:article) { create(:article, user: current_user) }
 
-        it "記事を削除できる" do
-          expect { subject }.to change { Article.count }.by(-1)
-          expect(response).to have_http_status(:no_content)
-        end
+      it "記事を削除できる" do
+        expect { subject }.to change { Article.count }.by(-1)
+        expect(response).to have_http_status(:no_content)
       end
+    end
 
-      context "他人が所持している記事のレコードを削除しようとするとき" do
-        let(:other_user) { create(:user) }
-        let!(:article) { create(:article, user: other_user) }
+    context "他人が所持している記事のレコードを削除しようとするとき" do
+      let(:other_user) { create(:user) }
+      let!(:article) { create(:article, user: other_user) }
 
-        it "記事を削除できない" do
-          expect { subject }.to raise_error(ActiveRecord::RecordNotFound) &
-                                change { Article.count }.by(0)
-        end
+      it "記事を削除できない" do
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound) &
+                              change { Article.count }.by(0)
       end
     end
   end
