@@ -1,4 +1,3 @@
-
 <template>
   <v-container v-model="article" class="item elevation-3 article-container">
     <v-layout xs-12 class="top-info-container">
@@ -9,10 +8,11 @@
       <h1 class="article-title">{{ article.title }}</h1>
     </v-layout>
     <v-layout class="article-body-container">
-      <div id="article-body" v-html="compiledMarkdown"></div>
+      <div class="article-body" v-html="compiledMarkdown(article.body)"></div>
     </v-layout>
   </v-container>
 </template>
+
 <script>
 import axios from "axios";
 import TimeAgo from 'vue2-timeago'
@@ -31,32 +31,23 @@ export default {
   },
 
   async created(){
-    // Add 'hljs' class to code tag
     const renderer = new marked.Renderer();
-    renderer.code = function(code, language) {
-      return (
-        "<pre" +
-        '><code class="hljs">' +
-        hljs.highlightAuto(code).value +
-        "</code></pre>"
-      );
+    let data = "";
+    renderer.code = function(code, lang) {
+      const _lang = lang.split(".").pop();
+      try {
+        data = hljs.highlight(_lang, code, true).value;
+      } catch (e) {
+        data = hljs.highlightAuto(code).value;
+      }
+      return `<pre><code class="hljs"> ${data} </code></pre>`;
     };
+
     marked.setOptions({
       renderer: renderer,
       tables: true,
       sanitize: true,
-      langPrefix: "",
-      highlight: function(code, lang) {
-        if (!lang || lang == "default") {
-          return hljs.highlightAuto(code, [lang]).value;
-        } else {
-          try {
-            return hljs.highlight(lang, code, true).value;
-          } catch (e) {
-            // Do nonthing!
-          }
-        }
-      }
+      langPrefix: ""
     });
   },
 
@@ -66,7 +57,9 @@ export default {
 
   computed: {
     compiledMarkdown() {
-      return marked(this.article.body);
+      return function(text) {
+        return marked(text);
+      };
     }
   },
 
@@ -96,6 +89,9 @@ export default {
 .article-title {
   font-size: 2.5em;
   line-height: 1.4;
+}
+.article-body {
+  width: 100%;
 }
 .article-body-container {
   margin: 2em 0;

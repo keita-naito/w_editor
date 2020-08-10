@@ -1,14 +1,19 @@
 <template>
   <form class="article-form">
     <v-text-field outlined single-line v-model="title" name="title" placeholder="タイトル" class="title-form"></v-text-field>
-    <v-textarea
-      outlined
-      height="100%"
-      v-model="body"
-      name="body"
-      placeholder="Markdown で記述することができます"
-      class="body-form"
-    ></v-textarea>
+    <div class="edit-area">
+      <v-textarea
+        outlined
+        no-resize
+        hide-details
+        height="100%"
+        v-model="body"
+        name="body"
+        placeholder="Markdown で記述することができます"
+        class="body-form"
+      ></v-textarea>
+      <div v-html="compiledMarkdown(this.body)" class="preview">a</div>
+    </div>
     <div class="create_btn_area">
       <v-btn @click="createArticle" color="#3085DE" class="create_btn font-weight-bold white--text">記事を投稿</v-btn>
     </div>
@@ -18,6 +23,8 @@
 <script>
 import axios from "axios";
 import Router from "../router/router";
+import marked from "marked";
+import hljs from "highlight.js";
 
 const headers = {
   headers: {
@@ -32,6 +39,35 @@ export default {
     return {
       title: "",
       body: "",
+    }
+  },
+
+  async created(){
+    const renderer = new marked.Renderer();
+    let data = "";
+    renderer.code = function(code, lang) {
+      const _lang = lang.split(".").pop();
+      try {
+        data = hljs.highlight(_lang, code, true).value;
+      } catch (e) {
+        data = hljs.highlightAuto(code).value;
+      }
+      return `<pre><code class="hljs"> ${data} </code></pre>`;
+    };
+
+    marked.setOptions({
+      renderer: renderer,
+      tables: true,
+      sanitize: true,
+      langPrefix: ""
+    });
+  },
+
+  computed: {
+    compiledMarkdown() {
+      return function(text) {
+        return marked(text);
+      };
     }
   },
 
@@ -63,8 +99,28 @@ export default {
   flex-flow: column;
   width: 100%;
 }
+
 .title-form {
   flex: none;
+  background: #fff;
+}
+
+.edit-area {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.preview {
+  width: 50%;
+  padding: 12px;
+  // margin-bottom: 8px;
+  border: 1px solid rgba(0,0,0,.42);
+  border-radius: 4px;
+  border-left: none;
+  overflow: auto;
 }
 </style>
 
@@ -79,5 +135,9 @@ export default {
 
 .v-text-field .v-text-field__details {
   display: none;
+}
+
+.input__slot {
+  background: #fff;
 }
 </style>
