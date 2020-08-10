@@ -62,7 +62,7 @@ code:before {
 
 
 
-.preview {
+.preview, .article_detail {
   h2 {
     border-bottom: 1px solid rgba(0,0,0,.42);
     margin: 30px 0 10px;

@@ -1,15 +1,17 @@
 <template>
   <v-container v-model="article" class="item elevation-3 article-container">
-    <v-layout xs-12 class="top-info-container">
-      <span class="user-name">@{{ article.user.name }}</span>
-      <time-ago :refresh="60" :datetime="article.updated_at" locale="en" tooltip="top" long></time-ago>
-    </v-layout>
-    <v-layout>
-      <h1 class="article-title">{{ article.title }}</h1>
-    </v-layout>
-    <v-layout class="article-body-container">
-      <div class="article-body" v-html="compiledMarkdown(article.body)"></div>
-    </v-layout>
+    <div class="article_detail">
+      <v-layout xs-12 class="top-info-container">
+        <span class="user-name">@{{ article.user.name }}</span>
+        <time-ago :refresh="60" :datetime="article.updated_at" locale="en" tooltip="top" long></time-ago>
+      </v-layout>
+      <v-layout>
+        <h1 class="article-title">{{ article.title }}</h1>
+      </v-layout>
+      <v-layout class="article-body-container">
+        <div class="article-body" v-html="compiledMarkdown(article.body)"></div>
+      </v-layout>
+    </div>
   </v-container>
 </template>
 
@@ -85,6 +87,8 @@ export default {
 }
 .article-container {
   margin-top: 2em;
+  background: #fff;
+  margin-bottom: 20px;
 }
 .article-title {
   font-size: 2.5em;
