@@ -17,8 +17,10 @@ RSpec.describe "Api::V1::Articles::Drafts", type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(res.length).to eq 1
+        expect(res[0]["id"]).to eq article1.id
         expect(res[0].keys).to eq ["id", "title", "updated_at", "user"]
         expect(res[0]["user"].keys).to eq ["id", "name", "email"]
+        expect(res[0]["user"]["id"]).to eq current_user.id
       end
     end
   end
