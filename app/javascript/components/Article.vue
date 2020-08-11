@@ -8,7 +8,7 @@
         <v-btn text fab small class="mr-5" @click="moveToEditArticlePage(article.id)">
           <v-icon color="#3085DE">fas fa-pencil-alt</v-icon>
         </v-btn>
-        <v-btn text fab small class="mr-2">
+        <v-btn text fab small class="mr-2" @click="confirmDeleteArticle">
           <v-icon color="#3085DE">fas fa-trash-alt</v-icon>
         </v-btn>
       </v-layout>
@@ -28,6 +28,16 @@ import TimeAgo from 'vue2-timeago'
 import marked from "marked";
 import hljs from 'highlight.js';
 import Router from "../router/router";
+
+const headers = {
+  headers: {
+    Authorization: "Bearer",
+    "Access-Control-Allow-Origin": "*",
+    "access-token": localStorage.getItem("access-token"),
+    client: localStorage.getItem("client"),
+    uid: localStorage.getItem("uid")
+  }
+};
 
 export default {
   components: {
@@ -92,6 +102,21 @@ export default {
 
     moveToEditArticlePage(id) {
       Router.push(`/articles/${id}/edit`);
+    },
+
+    async confirmDeleteArticle() {
+      const result = confirm("この記事を削除してもよろしいですか？")
+      if (result) {
+        await axios
+          .delete(`/api/v1/articles/${this.article.id}`, headers)
+          .then(_response => {
+            Router.push("/")
+          })
+          .catch(e => {
+            // TODO: 適切な Error 表示
+            alert(e.response.statusText);
+          });
+      }
     }
   }
 }
