@@ -30,6 +30,10 @@ const router = new Router({
       component: EditArticle,
     },
     {
+      path: "/articles/:id/edit",
+      component: EditArticle
+    },
+    {
       path: "/articles/:id",
       component: Article,
       name: "article",

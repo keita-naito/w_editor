@@ -5,7 +5,7 @@
         <span class="user-name">@{{ article.user.name }}</span>
         <time-ago :refresh="60" :datetime="article.updated_at" locale="en" tooltip="top" long></time-ago>
         <v-spacer></v-spacer>
-        <v-btn text fab small class="mr-5">
+        <v-btn text fab small class="mr-5" @click="moveToEditArticlePage(article.id)">
           <v-icon color="#3085DE">fas fa-pencil-alt</v-icon>
         </v-btn>
         <v-btn text fab small class="mr-2">
@@ -27,6 +27,7 @@ import axios from "axios";
 import TimeAgo from 'vue2-timeago'
 import marked from "marked";
 import hljs from 'highlight.js';
+import Router from "../router/router";
 
 export default {
   components: {
@@ -69,6 +70,10 @@ export default {
       return function(text) {
         return marked(text);
       };
+    },
+
+    editAble() {
+      return localStorage.getItem("uid") === this.article.user.email
     }
   },
 
@@ -84,6 +89,10 @@ export default {
           alert(e.response.statusText);
         });
     },
+
+    moveToEditArticlePage(id) {
+      Router.push(`/articles/${id}/edit`);
+    }
   }
 }
 </script>
