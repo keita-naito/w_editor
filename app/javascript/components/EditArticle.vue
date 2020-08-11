@@ -15,7 +15,19 @@
       <div v-html="compiledMarkdown(this.body)" class="preview">a</div>
     </div>
     <div class="create_btn_area">
-      <v-btn @click="createArticle" color="#3085DE" class="create_btn font-weight-bold white--text">記事を投稿</v-btn>
+      <v-btn
+        @click="createArticle('published')"
+        color="#3085DE"
+        class="font-weight-bold white--text"
+        >記事を投稿
+      </v-btn>
+      <v-btn
+        @click="createArticle('draft')"
+        color="#3085DE"
+        class="font-weight-bold"
+        outlined
+        >下書き投稿
+      </v-btn>
     </div>
   </form>
 </template>
@@ -72,10 +84,11 @@ export default {
   },
 
   methods: {
-    async createArticle() {
+    async createArticle(status) {
       const params = {
         title: this.title,
-        body: this.body
+        body: this.body,
+        status: status
       };
       await axios
         .post("/api/v1/articles", params, headers)
