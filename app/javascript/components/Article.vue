@@ -4,6 +4,13 @@
       <v-layout xs-12 class="top-info-container">
         <span class="user-name">@{{ article.user.name }}</span>
         <time-ago :refresh="60" :datetime="article.updated_at" locale="en" tooltip="top" long></time-ago>
+        <v-spacer></v-spacer>
+        <v-btn text fab small class="mr-5">
+          <v-icon color="#3085DE">fas fa-pencil-alt</v-icon>
+        </v-btn>
+        <v-btn text fab small class="mr-2">
+          <v-icon color="#3085DE">fas fa-trash-alt</v-icon>
+        </v-btn>
       </v-layout>
       <v-layout>
         <h1 class="article-title">{{ article.title }}</h1>
