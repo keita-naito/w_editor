@@ -106,7 +106,7 @@ export default {
     },
 
     moveToMyPage() {
-      alert("マイページへ移動");
+      Router.push("/mypage");
     },
 
     moveToDrafts() {

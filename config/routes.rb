@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "articles/drafts/:id/edit", to: "home#index"
   get "articles/:id/edit", to: "home#index"
   get "articles/:id", to: "home#index"
+  get "mypage", to: "home#index"
 
   namespace :api do
     namespace :v1 do

@@ -7,6 +7,7 @@ import Login from "../components/Login.vue";
 import EditArticle from "../components/EditArticle.vue";
 import DraftArticlesContainer from "../components/DraftArticlesContainer.vue";
 import EditDraftArticleContainer from "../components/EditDraftArticleContainer.vue";
+import MyPage from "../components/MyPage.vue";
 
 Vue.use(Router);
 
@@ -48,6 +49,10 @@ const router = new Router({
       path: "/articles/:id",
       component: Article,
       name: "article",
+    },
+    {
+      path: "/mypage",
+      component: MyPage
     },
   ],
 });
