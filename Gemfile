@@ -5,6 +5,7 @@ ruby "2.7.2"
 
 gem "active_model_serializers", "~> 0.10.0"
 gem "bootsnap", ">= 1.1.0", require: false
+gem "config"
 gem "devise_token_auth"
 gem "pg"
 gem "puma", "~> 3.11"
