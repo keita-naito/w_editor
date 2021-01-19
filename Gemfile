@@ -9,6 +9,7 @@ gem "config"
 gem "devise_token_auth"
 gem "pg"
 gem "puma", "~> 3.11"
+gem 'rack-cors'
 gem "rails", "~> 6.0.3"
 gem "turbolinks", "~> 5"
 gem "webpacker"
