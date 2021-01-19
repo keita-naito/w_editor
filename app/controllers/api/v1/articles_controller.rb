@@ -9,18 +9,18 @@ module Api::V1
 
     def show
       article = Article.published.find(params[:id])
-      render json: article
+      render json: article, serializer: Api::V1::ArticleSerializer
     end
 
     def create
       article = current_user.articles.create!(article_params)
-      render json: article
+      render json: article, serializer: Api::V1::ArticleSerializer
     end
 
     def update
       article = current_user.articles.find(params[:id])
       article.update!(article_params)
-      render json: article
+      render json: article, serializer: Api::V1::ArticleSerializer
     end
 
     def destroy
