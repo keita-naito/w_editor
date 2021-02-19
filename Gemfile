@@ -4,7 +4,7 @@ git_source(:github) {|repo| "https://github.com/#{repo}.git" }
 ruby "2.7.2"
 
 gem "active_model_serializers", "~> 0.10.0"
-gem "bootsnap", ">= 1.1.0", require: false
+gem "bootsnap", ">= 1.4.2", require: false
 gem "config"
 gem "devise_token_auth"
 gem "pg"
@@ -15,6 +15,7 @@ gem "turbolinks", "~> 5"
 gem "webpacker"
 
 group :development, :test do
+  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   gem "factory_bot_rails"
   gem "faker"
   gem "pry-byebug"
@@ -36,6 +37,5 @@ group :development do
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
 end
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
