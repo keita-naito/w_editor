@@ -3,6 +3,7 @@ module Api::V1
     before_action :authenticate_user!, only: [:create, :update, :destroy]
 
     def index
+      #
       articles = Article.published.order(updated_at: :desc)
       render json: articles, each_serializer: Api::V1::ArticlePreviewSerializer
     end
