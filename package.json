@@ -1,5 +1,9 @@
 {
   "name": "wonderful_editor",
+  "engines": {
+    "node": "15.X",
+    "yarn": "1.x"
+  },
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
