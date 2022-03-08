@@ -1,0 +1,2 @@
+frontend:
+  url: <%= ENV.fetch("FRONT_APP_URL") { "" } %>
