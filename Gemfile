@@ -8,7 +8,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 gem "config"
 gem "devise_token_auth"
 gem "pg"
-gem "puma", "~> 3.11"
+gem "puma", "~> 4.3"
 gem "rack-cors"
 gem "rails", "~> 6.0.3"
 gem "turbolinks", "~> 5"
