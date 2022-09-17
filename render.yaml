@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: wonderful-editor
+    env: ruby
+    region: singapore
+    plan: free
+    branch: master
+    numInstances: 1
+    healthCheckPath: /
+    buildCommand: ./bin/render-build.sh
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postgresql-wonderful-editor
+          property: connectionString
+    autoDeploy: false
+
+databases:
+  - name: postgresql-wonderful-editor
+    region: singapore
+    plan: free
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere # 学習用
